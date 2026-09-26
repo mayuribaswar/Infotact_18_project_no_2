@@ -1,12 +1,39 @@
+# Python virtual environments
 .venv/
 venv/
 env/
+
+# Python cache
 __pycache__/
 *.py[cod]
-.env
+
+# IDE
 .vscode/
 .idea/
+
+# Logs
+logs/
 *.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# PySpark
 spark-warehouse/
 metastore_db/
-derby.log
+derby.log/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Generated spatial outputs
+data/output/
+spatial/data/output/
+
+# Environment variables
+.env
