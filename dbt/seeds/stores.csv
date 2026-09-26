@@ -1,0 +1,11 @@
+store_id,store_name,latitude,longitude,store_type
+S001,Store A,20.0059,73.7750,Retail
+S002,Store B,20.0125,73.7890,Retail
+S003,Store C,19.9975,73.7905,Retail
+S004,Store D,20.0180,73.7700,Retail
+S005,Store E,20.0250,73.7820,Retail
+S006,Store F,20.0085,73.7980,Retail
+S007,Store G,20.0300,73.7650,Retail
+S008,Store H,19.9880,73.7800,Retail
+S009,Store I,20.0150,73.8050,Retail
+S010,Store J,20.0350,73.7950,Retail
