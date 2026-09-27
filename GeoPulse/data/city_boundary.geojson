@@ -1,0 +1,30 @@
+{
+  "type": "FeatureCollection",
+  "name": "Nashik_Demo_City_Boundary",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "city": "Nashik",
+        "boundary_type": "demo_project_boundary"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [73.68, 19.94],
+            [73.72, 19.91],
+            [73.80, 19.92],
+            [73.88, 19.94],
+            [73.91, 19.98],
+            [73.91, 20.04],
+            [73.86, 20.07],
+            [73.77, 20.07],
+            [73.69, 20.04],
+            [73.68, 19.94]
+          ]
+        ]
+      }
+    }
+  ]
+}

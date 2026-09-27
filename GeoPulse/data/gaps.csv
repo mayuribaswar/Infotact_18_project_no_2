@@ -1,0 +1,26 @@
+gap_id,location_name,latitude,longitude,gap_type,severity
+G001,Nashik Road,19.9975,73.7898,Road,High
+G002,Panchavati,20.0059,73.7936,Healthcare,Medium
+G003,Deolali,19.9442,73.8347,Water,High
+G004,Gangapur,20.0077,73.6767,Education,Low
+G005,Satpur,20.0059,73.7480,Internet,Medium
+G006,College Road,20.0089,73.7747,Road,Medium
+G007,Mahatma Nagar,20.0123,73.7797,Healthcare,High
+G008,Indira Nagar,19.9787,73.8010,Water,Medium
+G009,Pathardi Phata,19.9526,73.8317,Education,Low
+G010,Canada Corner,20.0020,73.7681,Internet,High
+G011,Adgaon,20.0421,73.8500,Road,Medium
+G012,Ambad,19.9412,73.7605,Water,High
+G013,Sinnar Road,19.9540,73.9000,Healthcare,Medium
+G014,Trimbak Road,20.0120,73.7200,Education,Low
+G015,Test Outside East,20.0800,73.9500,Road,High
+G016,Test Outside West,20.0100,73.6000,Water,Medium
+G017,New Nashik,19.9850,73.8200,Internet,Low
+G018,Dwarka,19.9880,73.7960,Healthcare,High
+G019,Makhmalabad,20.0300,73.7700,Education,Medium
+G020,Untwadi,19.9700,73.7600,Road,Low
+G021,Sharanpur Road,20.0050,73.7700,Water,Medium
+G022,Tidke Colony,19.9950,73.7800,Internet,High
+G023,Parijat Nagar,20.0150,73.7900,Healthcare,Low
+G024,Deepali Nagar,19.9650,73.8050,Education,Medium
+G025,Pathardi,19.9450,73.8200,Road,High

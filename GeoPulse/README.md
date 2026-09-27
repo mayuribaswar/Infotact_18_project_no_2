@@ -1566,3 +1566,101 @@ The next stage will use validated GPS records to calculate:
 * Device-level movement.
 * Total distance travelled.
 * Movement-related metrics.
+
+# GeoPulse
+
+## Geospatial Mobility Analytics Platform
+
+GeoPulse is a geospatial data processing and mobility analytics project designed to analyze movement data, detect spatial patterns, validate geographic boundaries, and identify important mobility insights using modern big-data and geospatial technologies.
+
+The project uses Python, Apache Spark, Apache Sedona, and spatial data processing techniques to build a scalable geospatial analytics pipeline.
+
+---
+
+# Project Objectives
+
+The main objectives of GeoPulse are:
+
+- Process large-scale geospatial mobility data.
+- Perform spatial data validation.
+- Analyze movement and location patterns.
+- Detect invalid geographic coordinates.
+- Perform point-in-polygon analysis.
+- Validate whether movement points fall inside defined boundaries.
+- Prepare clean spatial datasets for further analytics.
+- Build a scalable spatial-processing environment using Apache Spark and Apache Sedona.
+- Generate analytical outputs that can later be used for dashboards and visualization.
+
+---
+
+# Technology Stack
+
+## Programming Language
+
+- Python 3.12+
+
+## Big Data Processing
+
+- Apache Spark
+- PySpark
+
+## Geospatial Processing
+
+- Apache Sedona
+- Spatial SQL
+- GeoPandas
+- Shapely
+
+## Data Processing
+
+- Pandas
+- CSV
+- JSON
+
+## Testing
+
+- Pytest
+
+## Development Tools
+
+- Visual Studio Code
+- PowerShell
+- Git
+- GitHub
+- Python Virtual Environment
+
+---
+
+# Project Structure
+
+```text
+GeoPulse/
+│
+├── spatial/
+│   ├── __init__.py
+│   │
+│   ├── jobs/
+│   │   ├── __init__.py
+│   │   ├── test_sedona.py
+│   │   ├── boundary_validation.py
+│   │   └── movement_analysis.py
+│   │
+│   ├── data/
+│   │   ├── raw/
+│   │   ├── processed/
+│   │   └── sample/
+│   │
+│   ├── schemas/
+│   │   └── spatial_schema.py
+│   │
+│   └── utils/
+│       ├── __init__.py
+│       └── spatial_utils.py
+│
+├── tests/
+│   ├── __init__.py
+│   └── test_spatial_processing.py
+│
+├── requirements.txt
+├── README.md
+└── .gitignore
