@@ -1,11 +1,21 @@
 store_id,store_name,latitude,longitude,store_type
-S001,Store A,20.0059,73.7750,Retail
-S002,Store B,20.0125,73.7890,Retail
-S003,Store C,19.9975,73.7905,Retail
-S004,Store D,20.0180,73.7700,Retail
-S005,Store E,20.0250,73.7820,Retail
-S006,Store F,20.0085,73.7980,Retail
-S007,Store G,20.0300,73.7650,Retail
-S008,Store H,19.9880,73.7800,Retail
-S009,Store I,20.0150,73.8050,Retail
-S010,Store J,20.0350,73.7950,Retail
+S001,GeoMart Central,20.0059,73.7797,Supermarket
+S002,FreshBasket,20.0078,73.7815,Grocery
+S003,DailyNeeds,20.0102,73.7768,Convenience
+S004,SmartBuy,20.0035,73.7842,Supermarket
+S005,CityFresh,20.0124,73.7829,Grocery
+S006,ValueMart,20.0008,73.7754,Supermarket
+S007,QuickShop,20.0151,73.7791,Convenience
+S008,FamilyMart,20.0087,73.7880,Grocery
+S009,UrbanBasket,19.9989,73.7812,Supermarket
+S010,GreenMart,20.0042,73.7718,Grocery
+S011,MetroNeeds,20.0137,73.7742,Convenience
+S012,EasyBuy,20.0170,73.7855,Supermarket
+S013,PrimeMart,19.9968,73.7769,Grocery
+S014,LocalFresh,20.0098,73.7699,Grocery
+S015,MarketPoint,20.0017,73.7891,Supermarket
+S016,DailyBasket,20.0182,73.7780,Convenience
+S017,FreshWorld,19.9949,73.7834,Grocery
+S018,SuperSave,20.0115,73.7902,Supermarket
+S019,NeighborhoodMart,20.0066,73.7675,Convenience
+S020,CityBasket,19.9995,73.7707,Grocery
