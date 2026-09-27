@@ -1,12 +1,14 @@
+@"
 # Python
 __pycache__/
 *.py[cod]
 *.pyo
 
-# Virtual environment
+# Virtual environments
 .venv/
 venv/
 env/
+ENV/
 
 # Testing
 .pytest_cache/
@@ -22,14 +24,29 @@ spark-warehouse/
 metastore_db/
 derby.log/
 
-# Generated output
+# Logs
+*.log
+
+# Generated files
 output/
 outputs/
 results/
+*.tmp
+*.temp
+
+# Large generated/data files
+*.parquet
+*.pkl
+*.pickle
+*.joblib
+*.zip
+*.tar
+*.gz
+
+# Python/Spark packages
+*.whl
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
+"@ | Set-Content .gitignore
