@@ -1,39 +1,35 @@
-# Python virtual environments
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
 .venv/
 venv/
 env/
 
-# Python cache
-__pycache__/
-*.py[cod]
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
 
 # IDE
 .vscode/
 .idea/
 
-# Logs
-logs/
-*.log
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Jupyter
-.ipynb_checkpoints/
-
-# PySpark
+# Spark
 spark-warehouse/
 metastore_db/
 derby.log/
 
-# Temporary files
-*.tmp
-*.temp
+# Generated output
+output/
+outputs/
+results/
 
-# Generated spatial outputs
-data/output/
-spatial/data/output/
+# OS
+.DS_Store
+Thumbs.db
 
-# Environment variables
-.env
+# Logs
+*.log
