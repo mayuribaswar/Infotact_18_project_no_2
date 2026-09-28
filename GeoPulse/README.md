@@ -1664,3 +1664,335 @@ GeoPulse/
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+
+# GeoPulse — Day 5
+
+## Member 2: GPS Data Preparation for Snowflake Ingestion
+
+### 📌 Overview
+
+Day 5 focuses on preparing GPS and movement data for ingestion into **Snowflake**.
+
+The objective is to clean, validate, organize, and prepare GPS records so they can be loaded into the `GEOPULSE.RAW` schema created by Member 1.
+
+---
+
+## 🎯 Day 5 Objective
+
+The main objectives are:
+
+* Prepare GPS data for Snowflake ingestion.
+* Create a structured GPS CSV dataset.
+* Validate GPS coordinates.
+* Remove duplicate records.
+* Validate speed and GPS accuracy values.
+* Convert timestamps into a standard format.
+* Sort GPS records by user and timestamp.
+* Generate Snowflake table and ingestion SQL.
+* Keep the data ready for the next stages of the GeoPulse pipeline.
+
+---
+
+## 📁 Project Structure
+
+```text
+GeoPulse/
+│
+├── data/
+│   └── snowflake/
+│       ├── gps_data.csv
+│       ├── gps_data_prepared.csv
+│       └── load_gps_data.sql
+│
+├── spatial/
+│   └── ingestion/
+│       ├── __init__.py
+│       ├── prepare_gps_data.py
+│       └── snowflake_loader.py
+│
+└── README.md
+```
+
+---
+
+## 📊 GPS Dataset
+
+The GPS dataset contains the following fields:
+
+| Column       | Description            |
+| ------------ | ---------------------- |
+| `gps_id`     | Unique GPS record ID   |
+| `user_id`    | User/device identifier |
+| `latitude`   | GPS latitude           |
+| `longitude`  | GPS longitude          |
+| `timestamp`  | GPS record timestamp   |
+| `speed_kmh`  | Movement speed in km/h |
+| `accuracy_m` | GPS accuracy in meters |
+
+---
+
+## 🧹 Data Preparation
+
+The `prepare_gps_data.py` script performs the following operations:
+
+### 1. Load GPS Data
+
+The script reads:
+
+```text
+data/snowflake/gps_data.csv
+```
+
+using Pandas.
+
+### 2. Remove Duplicate Records
+
+Duplicate GPS records are removed using:
+
+```python
+df.drop_duplicates()
+```
+
+### 3. Validate Coordinates
+
+Latitude must be between:
+
+```text
+-90 and 90
+```
+
+Longitude must be between:
+
+```text
+-180 and 180
+```
+
+Invalid coordinates are removed.
+
+### 4. Validate Speed
+
+Speed values must be greater than or equal to zero.
+
+### 5. Validate GPS Accuracy
+
+Accuracy values must be greater than zero.
+
+### 6. Convert Timestamp
+
+GPS timestamps are converted into a standard Pandas datetime format.
+
+### 7. Sort Records
+
+Records are sorted using:
+
+```text
+user_id
+timestamp
+```
+
+This makes the data suitable for movement analysis.
+
+---
+
+## ❄️ Snowflake Preparation
+
+The `snowflake_loader.py` script prepares SQL for loading the cleaned GPS data into:
+
+```text
+GEOPULSE
+   └── RAW
+       └── GPS_DATA
+```
+
+The generated Snowflake table contains:
+
+```sql
+GPS_ID INTEGER
+USER_ID VARCHAR(50)
+LATITUDE FLOAT
+LONGITUDE FLOAT
+TIMESTAMP TIMESTAMP_NTZ
+SPEED_KMH FLOAT
+ACCURACY_M FLOAT
+```
+
+The generated SQL file is:
+
+```text
+data/snowflake/load_gps_data.sql
+```
+
+---
+
+## ▶️ How to Run
+
+### Step 1 — Activate Virtual Environment
+
+From the GeoPulse root directory:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### Step 2 — Prepare GPS Data
+
+Run:
+
+```powershell
+python -m spatial.ingestion.prepare_gps_data
+```
+
+Expected output:
+
+```text
+Loading GPS data...
+Initial rows: 20
+Prepared rows: 20
+Saved file: data\snowflake\gps_data_prepared.csv
+```
+
+### Step 3 — Generate Snowflake SQL
+
+Run:
+
+```powershell
+python -m spatial.ingestion.snowflake_loader
+```
+
+Expected output:
+
+```text
+Preparing Snowflake ingestion SQL...
+Records ready for ingestion: 20
+SQL file created: data\snowflake\load_gps_data.sql
+GPS data is ready for Snowflake ingestion.
+```
+
+---
+
+## 🔍 Data Validation
+
+The prepared dataset is checked for:
+
+* Duplicate records
+* Missing values
+* Invalid latitude
+* Invalid longitude
+* Negative speed
+* Invalid GPS accuracy
+* Incorrect timestamp format
+
+The validation summary is displayed by the preparation script.
+
+---
+
+## 🔄 Data Flow
+
+```text
+Raw GPS CSV
+     │
+     ▼
+prepare_gps_data.py
+     │
+     ├── Remove duplicates
+     ├── Validate coordinates
+     ├── Validate speed
+     ├── Validate accuracy
+     ├── Convert timestamps
+     └── Sort records
+     │
+     ▼
+gps_data_prepared.csv
+     │
+     ▼
+snowflake_loader.py
+     │
+     ▼
+load_gps_data.sql
+     │
+     ▼
+GEOPULSE.RAW.GPS_DATA
+```
+
+---
+
+## 👥 Team Integration
+
+### Member 1
+
+Creates the Snowflake structure:
+
+```text
+GEOPULSE
+├── RAW
+├── STAGING
+└── ANALYTICS
+```
+
+### Member 2
+
+Prepares GPS data and generates the ingestion SQL.
+
+### Member 3
+
+Configures the dbt connection with Snowflake.
+
+### Member 4
+
+Creates the Snowflake API service for retrieving data.
+
+---
+
+## 📦 Day 5 Deliverables
+
+* [x] GPS sample dataset
+* [x] GPS data preparation script
+* [x] Data validation
+* [x] Duplicate removal
+* [x] Timestamp conversion
+* [x] Prepared GPS dataset
+* [x] Snowflake table definition
+* [x] Snowflake ingestion SQL
+* [x] Local execution test
+
+---
+
+## 🧪 Testing
+
+The following commands were used to test the Day 5 implementation:
+
+```powershell
+python -m spatial.ingestion.prepare_gps_data
+```
+
+```powershell
+python -m spatial.ingestion.snowflake_loader
+```
+
+Both scripts should complete successfully without errors.
+
+---
+
+## 🚀 Git Commit
+
+Day 5 commit:
+
+```text
+feat: prepare GPS data for Snowflake ingestion
+```
+
+Push the changes:
+
+```powershell
+git add data/snowflake spatial/ingestion
+git commit -m "feat: prepare GPS data for Snowflake ingestion"
+git push origin sakshi
+```
+
+---
+
+## 🎯 Day 5 Result
+
+At the end of Day 5, GPS data is cleaned, validated, structured, and ready to be ingested into the **GeoPulse Snowflake RAW layer**.
+
+This creates the foundation for the next stages of the GeoPulse data pipeline, including **dbt transformations, analytics, and API-based data retrieval**.
