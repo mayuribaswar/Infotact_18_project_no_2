@@ -1996,3 +1996,519 @@ git push origin sakshi
 At the end of Day 5, GPS data is cleaned, validated, structured, and ready to be ingested into the **GeoPulse Snowflake RAW layer**.
 
 This creates the foundation for the next stages of the GeoPulse data pipeline, including **dbt transformations, analytics, and API-based data retrieval**.
+
+# 🌍 GeoPulse — Day 6
+
+## Snowflake GPS Data Validation & Data Quality
+
+### 📅 Day
+
+**Day 6**
+
+### 👤 Member
+
+**Member 2**
+
+### 🎯 Objective
+
+The main objective of Day 6 is to prepare the **GPS data for reliable processing in Snowflake** by creating the RAW GPS table and performing different data validation and data quality checks.
+
+The validation process checks for:
+
+* Missing values
+* Invalid GPS coordinates
+* Duplicate records
+* Invalid speed values
+* Invalid GPS accuracy
+* Timestamp issues
+* Device-level data quality
+* GPS data ranges
+* Outliers and unusual values
+
+---
+
+# 🏗️ Day 6 Architecture
+
+```text
+GPS CSV Data
+     │
+     ▼
+┌─────────────────────┐
+│ Snowflake RAW Layer │
+│      GPS_RAW        │
+└──────────┬──────────┘
+           │
+           ▼
+┌──────────────────────────┐
+│     Data Validation      │
+│                          │
+│ • NULL checks            │
+│ • Coordinate validation  │
+│ • Duplicate detection    │
+│ • Speed validation       │
+│ • Accuracy validation    │
+│ • Timestamp checks       │
+└──────────┬───────────────┘
+           │
+           ▼
+┌──────────────────────────┐
+│    Data Quality Checks   │
+│                          │
+│ • Outlier detection      │
+│ • Device profiling       │
+│ • Date analysis          │
+│ • Hour analysis          │
+└──────────┬───────────────┘
+           │
+           ▼
+      STAGING Layer
+```
+
+---
+
+# 📁 Day 6 Files
+
+```text
+snowflake/
+└── scripts/
+    ├── create_tables.sql
+    ├── validate_gps_data.sql
+    ├── data_quality_checks.sql
+    └── gps_profile.sql
+```
+
+---
+
+# 🗄️ Snowflake Database Structure
+
+```text
+GEOPULSE
+│
+├── RAW
+│   └── GPS_RAW
+│
+├── STAGING
+│
+└── ANALYTICS
+```
+
+Day 6 mainly works with:
+
+```text
+GEOPULSE.RAW.GPS_RAW
+```
+
+---
+
+# 📊 GPS_RAW Table
+
+The RAW table contains the original GPS information.
+
+| Column      | Data Type | Description           |
+| ----------- | --------- | --------------------- |
+| `device_id` | VARCHAR   | GPS device identifier |
+| `timestamp` | TIMESTAMP | GPS record time       |
+| `latitude`  | FLOAT     | Latitude coordinate   |
+| `longitude` | FLOAT     | Longitude coordinate  |
+| `speed`     | FLOAT     | Device speed          |
+| `accuracy`  | FLOAT     | GPS accuracy          |
+
+---
+
+# 1️⃣ Create RAW Table
+
+File:
+
+```text
+create_tables.sql
+```
+
+The table is created inside:
+
+```text
+GEOPULSE.RAW
+```
+
+Example:
+
+```sql
+CREATE TABLE IF NOT EXISTS GPS_RAW (
+    device_id VARCHAR(50),
+    timestamp TIMESTAMP,
+    latitude FLOAT,
+    longitude FLOAT,
+    speed FLOAT,
+    accuracy FLOAT
+);
+```
+
+---
+
+# 2️⃣ Data Validation
+
+File:
+
+```text
+validate_gps_data.sql
+```
+
+The validation script checks the quality of incoming GPS records.
+
+## NULL Checks
+
+Checks for missing:
+
+```text
+device_id
+timestamp
+latitude
+longitude
+speed
+accuracy
+```
+
+Example:
+
+```sql
+SELECT COUNT(*) AS null_latitudes
+FROM GPS_RAW
+WHERE latitude IS NULL;
+```
+
+---
+
+# 🌐 3️⃣ Latitude Validation
+
+Valid latitude range:
+
+```text
+-90 to +90
+```
+
+Query:
+
+```sql
+SELECT *
+FROM GPS_RAW
+WHERE latitude IS NOT NULL
+  AND latitude NOT BETWEEN -90 AND 90;
+```
+
+Records returned by this query contain invalid latitude values.
+
+---
+
+# 🌐 4️⃣ Longitude Validation
+
+Valid longitude range:
+
+```text
+-180 to +180
+```
+
+Query:
+
+```sql
+SELECT *
+FROM GPS_RAW
+WHERE longitude IS NOT NULL
+  AND longitude NOT BETWEEN -180 AND 180;
+```
+
+---
+
+# 🚗 5️⃣ Speed Validation
+
+Speed should not be negative.
+
+```sql
+SELECT *
+FROM GPS_RAW
+WHERE speed < 0;
+```
+
+The query identifies invalid speed records.
+
+---
+
+# 📡 6️⃣ Accuracy Validation
+
+GPS accuracy should not be negative.
+
+```sql
+SELECT *
+FROM GPS_RAW
+WHERE accuracy < 0;
+```
+
+Very large accuracy values can also be investigated as possible low-quality GPS readings.
+
+---
+
+# 🔁 7️⃣ Duplicate Detection
+
+Duplicate GPS records are identified using:
+
+```text
+device_id
+timestamp
+latitude
+longitude
+```
+
+Query:
+
+```sql
+SELECT
+    device_id,
+    timestamp,
+    latitude,
+    longitude,
+    COUNT(*) AS duplicate_count
+FROM GPS_RAW
+GROUP BY
+    device_id,
+    timestamp,
+    latitude,
+    longitude
+HAVING COUNT(*) > 1
+ORDER BY duplicate_count DESC;
+```
+
+---
+
+# ⏱️ 8️⃣ Timestamp Analysis
+
+The dataset is checked for the earliest and latest GPS records.
+
+```sql
+SELECT
+    MIN(timestamp) AS earliest_timestamp,
+    MAX(timestamp) AS latest_timestamp
+FROM GPS_RAW;
+```
+
+This helps understand the time period covered by the dataset.
+
+---
+
+# 📱 9️⃣ Device Profiling
+
+The number of records generated by each device can be checked.
+
+```sql
+SELECT
+    device_id,
+    COUNT(*) AS record_count
+FROM GPS_RAW
+GROUP BY device_id
+ORDER BY record_count DESC;
+```
+
+This helps identify devices with unusually low or high numbers of records.
+
+---
+
+# 📅 🔟 Records by Date
+
+```sql
+SELECT
+    DATE(timestamp) AS record_date,
+    COUNT(*) AS record_count
+FROM GPS_RAW
+GROUP BY DATE(timestamp)
+ORDER BY record_date;
+```
+
+This helps understand daily GPS data volume.
+
+---
+
+# 🕐 1️⃣1️⃣ Records by Hour
+
+```sql
+SELECT
+    EXTRACT(HOUR FROM timestamp) AS record_hour,
+    COUNT(*) AS record_count
+FROM GPS_RAW
+GROUP BY EXTRACT(HOUR FROM timestamp)
+ORDER BY record_hour;
+```
+
+This helps analyze when GPS data is being generated.
+
+---
+
+# 📈 1️⃣2️⃣ GPS Data Profiling
+
+File:
+
+```text
+gps_profile.sql
+```
+
+The profile provides:
+
+* Total records
+* Unique devices
+* First GPS record
+* Last GPS record
+* Minimum latitude
+* Maximum latitude
+* Minimum longitude
+* Maximum longitude
+* Minimum speed
+* Maximum speed
+* Average speed
+* Average accuracy
+
+Example:
+
+```sql
+SELECT
+    COUNT(*) AS total_records,
+    COUNT(DISTINCT device_id) AS unique_devices,
+    MIN(timestamp) AS first_record,
+    MAX(timestamp) AS last_record,
+    MIN(latitude) AS min_latitude,
+    MAX(latitude) AS max_latitude,
+    MIN(longitude) AS min_longitude,
+    MAX(longitude) AS max_longitude,
+    MIN(speed) AS min_speed,
+    MAX(speed) AS max_speed,
+    AVG(speed) AS average_speed,
+    AVG(accuracy) AS average_accuracy
+FROM GPS_RAW;
+```
+
+---
+
+# 🧪 Final Data Quality Report
+
+The final validation summary provides a quick overview of the dataset.
+
+```sql
+SELECT
+    COUNT(*) AS total_records,
+    COUNT_IF(device_id IS NULL) AS missing_device_id,
+    COUNT_IF(timestamp IS NULL) AS missing_timestamp,
+    COUNT_IF(latitude IS NULL) AS missing_latitude,
+    COUNT_IF(longitude IS NULL) AS missing_longitude,
+    COUNT_IF(latitude NOT BETWEEN -90 AND 90)
+        AS invalid_latitude,
+    COUNT_IF(longitude NOT BETWEEN -180 AND 180)
+        AS invalid_longitude,
+    COUNT_IF(speed < 0)
+        AS invalid_speed,
+    COUNT_IF(accuracy < 0)
+        AS invalid_accuracy,
+    COUNT(DISTINCT device_id)
+        AS unique_devices
+FROM GPS_RAW;
+```
+
+---
+
+# 🧠 Concepts Learned
+
+During Day 6, the following concepts were covered:
+
+### SQL
+
+* `SELECT`
+* `COUNT`
+* `COUNT_IF`
+* `COUNT(DISTINCT)`
+* `MIN`
+* `MAX`
+* `AVG`
+* `MEDIAN`
+* `GROUP BY`
+* `HAVING`
+* `ORDER BY`
+* `WHERE`
+* `BETWEEN`
+* `EXTRACT`
+* `DATE`
+
+### Data Engineering
+
+* Data validation
+* Data profiling
+* Data quality
+* Duplicate detection
+* NULL detection
+* Range validation
+* Outlier identification
+* Raw data processing
+* Snowflake RAW layer
+
+---
+
+# 🔄 Day 6 Data Flow
+
+```text
+Raw GPS Data
+     ↓
+GPS_RAW
+     ↓
+NULL Validation
+     ↓
+Coordinate Validation
+     ↓
+Speed Validation
+     ↓
+Accuracy Validation
+     ↓
+Duplicate Detection
+     ↓
+Timestamp Analysis
+     ↓
+Device Profiling
+     ↓
+Data Quality Report
+     ↓
+STAGING
+```
+
+---
+
+# ✅ Day 6 Checklist
+
+* [x] Create Snowflake RAW table
+* [x] Create GPS_RAW structure
+* [x] Check total records
+* [x] Check NULL values
+* [x] Validate latitude
+* [x] Validate longitude
+* [x] Validate speed
+* [x] Validate accuracy
+* [x] Detect duplicate records
+* [x] Analyze timestamps
+* [x] Analyze devices
+* [x] Analyze records by date
+* [x] Analyze records by hour
+* [x] Create GPS data profile
+* [x] Create final data quality report
+
+---
+
+# 🚀 Git Commit
+
+After completing Day 6:
+
+```bash
+git add snowflake/scripts
+git commit -m "feat: add GPS data quality and validation checks"
+git push origin sakshi
+```
+
+---
+
+# 📌 Day 6 Outcome
+
+By the end of Day 6, the GeoPulse project has a structured **Snowflake RAW GPS layer** with validation and profiling queries.
+
+The validated data is now ready to move toward the **STAGING layer** for cleaning and transformation.
+
+**Next:** Day 7 will focus on **cleaning and transforming GPS data in the STAGING layer**.
