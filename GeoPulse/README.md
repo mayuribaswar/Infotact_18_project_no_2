@@ -2512,3 +2512,439 @@ By the end of Day 6, the GeoPulse project has a structured **Snowflake RAW GPS l
 The validated data is now ready to move toward the **STAGING layer** for cleaning and transformation.
 
 **Next:** Day 7 will focus on **cleaning and transforming GPS data in the STAGING layer**.
+
+# GeoPulse — Day 7: Spatial Hotspot Analysis
+
+## 📌 Overview
+
+Day 7 focuses on **Spatial Hotspot Analysis** in the GeoPulse project.
+
+The objective is to identify geographic areas where a large number of movement events are concentrated. Hotspot analysis helps detect locations with unusually high activity and provides useful spatial insights from movement data.
+
+The implementation uses **PySpark** for distributed data processing and **Apache Sedona** for spatial operations.
+
+---
+
+## 🎯 Day 7 Objectives
+
+* Load processed movement data using Spark.
+* Create spatial points from latitude and longitude.
+* Divide the geographic area into spatial grid cells.
+* Count movement events inside each grid cell.
+* Calculate hotspot statistics.
+* Identify high-activity spatial regions.
+* Save the hotspot analysis results for further processing or visualization.
+
+---
+
+## 🛠️ Technologies Used
+
+* Python 3.12.10
+* Apache Spark 3.5.6
+* Apache Sedona
+* PySpark
+* GeoPandas / spatial libraries where required
+* PyTest
+* Windows 11
+* VS Code
+* Git & GitHub
+
+---
+
+## 📂 Project Structure
+
+```text
+GeoPulse/
+│
+├── spatial/
+│   ├── __init__.py
+│   │
+│   ├── jobs/
+│   │   ├── __init__.py
+│   │   ├── boundary_validation.py
+│   │   ├── movement_analysis.py
+│   │   └── hotspot_analysis.py
+│   │
+│   ├── utils/
+│   │   └── ...
+│   │
+│   └── tests/
+│       └── ...
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── output/
+│
+├── configs/
+│   └── ...
+│
+├── .venv/
+├── requirements.txt
+├── README.md
+└── ...
+```
+
+---
+
+# 🔥 Hotspot Analysis
+
+## What is a Spatial Hotspot?
+
+A **spatial hotspot** is a geographic area where the concentration of events is significantly higher than surrounding areas.
+
+For example:
+
+```text
+Low Activity       Medium Activity       High Activity
+
+   🟢                    🟡                    🔴
+   🟢                    🟡                    🔴
+   🟢                    🟡                    🔴
+```
+
+In GeoPulse, movement events are grouped into spatial regions and the number of events in each region is calculated.
+
+A region with a high number of movement events can be considered a **high-activity area**.
+
+---
+
+# 🧠 Day 7 Processing Flow
+
+```text
+Movement Data
+      │
+      ▼
+Load Data using Spark
+      │
+      ▼
+Validate Latitude / Longitude
+      │
+      ▼
+Create Spatial Points
+      │
+      ▼
+Create Spatial Grid
+      │
+      ▼
+Assign Events to Grid Cells
+      │
+      ▼
+Count Events per Grid Cell
+      │
+      ▼
+Calculate Hotspot Statistics
+      │
+      ▼
+Identify High-Activity Areas
+      │
+      ▼
+Save Hotspot Results
+```
+
+---
+
+# 📊 Spatial Grid Concept
+
+The geographic area is divided into smaller grid cells.
+
+Example:
+
+```text
++------+------+------+------+
+| Cell | Cell | Cell | Cell |
+|  A1  |  A2  |  A3  |  A4  |
++------+------+------+------+
+| Cell | Cell | Cell | Cell |
+|  B1  |  B2  |  B3  |  B4  |
++------+------+------+------+
+| Cell | Cell | Cell | Cell |
+|  C1  |  C2  |  C3  |  C4  |
++------+------+------+------+
+```
+
+Each movement event is assigned to a grid cell based on its geographic coordinates.
+
+The number of events in each cell is then calculated.
+
+---
+
+# 📍 Input Data
+
+The hotspot analysis uses movement/location data containing geographic information such as:
+
+* Latitude
+* Longitude
+* Event ID
+* Timestamp
+* Movement information
+* Other processed spatial attributes
+
+Invalid geographic coordinates are filtered before spatial processing.
+
+Valid latitude range:
+
+```text
+-90 to 90
+```
+
+Valid longitude range:
+
+```text
+-180 to 180
+```
+
+---
+
+# ⚙️ Implementation
+
+The Day 7 job can be executed using:
+
+```powershell
+python -u -m spatial.jobs.hotspot_analysis
+```
+
+The `-m` option runs the Python module from the project package.
+
+---
+
+# 🚀 Running Day 7
+
+## 1. Open the project directory
+
+```powershell
+cd "C:\Users\Shree\OneDrive\Desktop\Infotact_18_project_no_2\GeoPulse"
+```
+
+---
+
+## 2. Activate the virtual environment
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+After activation, the terminal should show:
+
+```text
+(.venv)
+```
+
+---
+
+## 3. Verify Python
+
+```powershell
+python --version
+```
+
+Expected:
+
+```text
+Python 3.12.10
+```
+
+---
+
+## 4. Run Hotspot Analysis
+
+```powershell
+python -u -m spatial.jobs.hotspot_analysis
+```
+
+---
+
+# 🔍 Expected Processing
+
+The job should perform the following operations:
+
+### Step 1 — Start Spark
+
+A Spark session is initialized for distributed processing.
+
+### Step 2 — Initialize Apache Sedona
+
+Sedona is used for spatial data processing and geographic operations.
+
+### Step 3 — Load Movement Data
+
+The processed movement dataset is loaded into a Spark DataFrame.
+
+### Step 4 — Validate Coordinates
+
+Latitude and longitude values are checked to ensure they contain valid geographic coordinates.
+
+### Step 5 — Create Spatial Data
+
+Coordinates are converted into spatial point representations.
+
+### Step 6 — Generate Spatial Grid
+
+The geographic area is divided into grid cells.
+
+### Step 7 — Aggregate Events
+
+Movement events are grouped according to their grid cells.
+
+### Step 8 — Calculate Hotspot Statistics
+
+Event density/activity is calculated for each spatial region.
+
+### Step 9 — Identify Hotspots
+
+Grid cells with comparatively high activity are identified as hotspot areas.
+
+### Step 10 — Save Results
+
+The generated hotspot results are written to the configured output location.
+
+---
+
+# 📈 Example Output
+
+A conceptual hotspot result can look like:
+
+| Grid Cell | Event Count | Activity Level |
+| --------- | ----------: | -------------- |
+| G001      |        1250 | High           |
+| G002      |         820 | Medium         |
+| G003      |         310 | Low            |
+| G004      |        1475 | High           |
+
+The exact values depend on the dataset used by the GeoPulse pipeline.
+
+---
+
+# 🧪 Validation
+
+The Day 7 implementation should be checked for:
+
+* Successful Spark initialization
+* Successful Sedona initialization
+* Correct input data loading
+* Valid latitude and longitude values
+* Correct spatial point creation
+* Correct grid assignment
+* Correct event aggregation
+* Correct hotspot calculation
+* Successful output generation
+
+---
+
+# 🛡️ Error Handling
+
+The job should handle common problems such as:
+
+* Missing input files
+* Empty datasets
+* Invalid coordinates
+* Null latitude/longitude values
+* Spark initialization errors
+* Sedona configuration errors
+* Invalid data types
+* Output directory problems
+
+Meaningful error messages should be displayed when processing fails.
+
+---
+
+# 💡 Why Hotspot Analysis is Useful
+
+Spatial hotspot analysis can be used to understand:
+
+* High-traffic areas
+* Frequently visited locations
+* Movement concentration
+* Geographic activity patterns
+* Potential congestion zones
+* Frequently occurring spatial events
+* Regional movement behavior
+
+This makes hotspot analysis an important component of a geospatial analytics pipeline.
+
+---
+
+# 🔗 Relation with Previous GeoPulse Tasks
+
+The GeoPulse pipeline progressively builds spatial intelligence.
+
+```text
+Day 3
+Boundary Validation
+       │
+       ▼
+Day 4
+Movement Analysis
+       │
+       ▼
+Day 7
+Spatial Hotspot Analysis
+       │
+       ▼
+Spatial Insights
+```
+
+The outputs from previous spatial processing stages can be used as inputs for hotspot analysis.
+
+---
+
+# 🧰 Environment
+
+| Component        | Version    |
+| ---------------- | ---------- |
+| Operating System | Windows 11 |
+| Python           | 3.12.10    |
+| PySpark          | 3.5.6      |
+| Apache Spark     | 3.5.6      |
+| Java             | 21.0.12    |
+| PyTest           | 9.1.1      |
+| Environment      | `.venv`    |
+
+---
+
+# 📌 Important Command
+
+Run the Day 7 task from the **GeoPulse root directory**:
+
+```powershell
+python -u -m spatial.jobs.hotspot_analysis
+```
+
+Do not run the file by directly using:
+
+```powershell
+python hotspot_analysis.py
+```
+
+when the implementation depends on the project package structure.
+
+---
+
+# ✅ Day 7 Completion Checklist
+
+* [x] Spark environment configured
+* [x] Sedona environment configured
+* [x] Hotspot analysis module created
+* [x] Spatial data processing implemented
+* [x] Spatial grid processing implemented
+* [x] Hotspot aggregation implemented
+* [x] Output processing implemented
+* [x] Day 7 job executed successfully
+* [ ] Final visualization/dashboard integration
+
+---
+
+# 🎯 Day 7 Outcome
+
+By completing Day 7, GeoPulse can process geographic movement data and determine areas with concentrated spatial activity.
+
+The generated hotspot information can later be used for:
+
+* Spatial visualization
+* Maps
+* Dashboards
+* Geographic pattern analysis
+* Advanced spatial analytics
+
+---
+
