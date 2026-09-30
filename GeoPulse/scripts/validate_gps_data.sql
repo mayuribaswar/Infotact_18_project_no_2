@@ -1,6 +1,5 @@
 -- ============================================
 -- GeoPulse - GPS Data Validation
--- Day 6 - Member 2
 -- ============================================
 
 USE DATABASE GEOPULSE;
