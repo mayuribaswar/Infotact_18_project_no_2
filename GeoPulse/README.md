@@ -2948,3 +2948,76 @@ The generated hotspot information can later be used for:
 
 ---
 
+## Day 8 – Spatial Hotspot Visualization
+
+### Objective
+
+The objective of Day 8 was to convert the spatial hotspot analysis results into a structured and visual format.
+
+### Work Completed
+
+- Read the hotspot analysis output generated in Day 7.
+- Validated the required spatial columns.
+- Classified locations into LOW, MEDIUM, and HIGH hotspot categories.
+- Generated a structured CSV output.
+- Created a scatter-based spatial visualization.
+- Added automated tests for hotspot classification and coordinate validation.
+
+### Input
+
+The visualization process uses the hotspot analysis output containing:
+
+- Latitude
+- Longitude
+- Grid ID
+- Point Count
+- Density
+
+### Hotspot Classification
+
+The density values are divided into three categories:
+
+- LOW – lower-density spatial areas
+- MEDIUM – moderate-density spatial areas
+- HIGH – higher-density spatial areas
+
+### Output
+
+The process generates:
+
+`data/output/hotspot_visualized.csv`
+
+The output contains:
+
+- latitude
+- longitude
+- grid_id
+- point_count
+- density
+- classification
+
+A spatial visualization is also generated:
+
+`data/output/hotspot_map.png`
+
+### Testing
+
+Automated tests were added to verify:
+
+- Required columns
+- Hotspot classification
+- Valid classification values
+- Latitude range
+- Longitude range
+
+### Technologies Used
+
+- Python
+- Pandas
+- Matplotlib
+- Pytest
+- PySpark / Apache Sedona from previous spatial processing stages
+
+### Day 8 Outcome
+
+The hotspot results generated during spatial analysis are now available as both structured data and a visual representation, making high-density spatial areas easier to identify and analyze.
