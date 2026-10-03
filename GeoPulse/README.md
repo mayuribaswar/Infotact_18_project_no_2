@@ -3122,3 +3122,370 @@ GeoPulse/
     │   └── __init__.py
     ├── requirements-spatial.txt
     └── README.md
+    # Day 10 - Spatial Hotspot Analysis
+
+## Objective
+
+The objective of Day 10 is to identify geographic areas containing a high concentration of GPS events.
+
+Day 10 uses the validated GPS data generated during Day 9 and performs grid-based spatial aggregation and hotspot classification.
+
+---
+
+## Input Data
+
+Day 10 uses the validated GPS data from Day 9:
+
+```text
+data/output/day9_validation/validated_gps/
+```
+
+Only records containing valid latitude and longitude values are processed.
+
+---
+
+## Tasks Performed
+
+Day 10 performs the following tasks:
+
+1. Load validated GPS data.
+2. Detect latitude and longitude columns.
+3. Convert latitude and longitude to numeric values.
+4. Remove records with missing coordinates.
+5. Create spatial grid cells.
+6. Assign each GPS point to a grid.
+7. Count GPS events in each grid.
+8. Calculate spatial statistics.
+9. Calculate density thresholds.
+10. Classify grids as HIGH, MEDIUM or LOW.
+11. Rank grids based on event count.
+12. Identify the top hotspot grids.
+13. Save the results.
+
+---
+
+## Spatial Grid Generation
+
+A grid precision of `1000` is used.
+
+The grid coordinates are calculated using:
+
+```text
+grid_lat = floor(latitude * 1000)
+grid_lon = floor(longitude * 1000)
+```
+
+A unique grid identifier is created using:
+
+```text
+grid_id = grid_lat_grid_lon
+```
+
+For example:
+
+```text
+latitude  = 19.9975
+longitude = 73.7898
+```
+
+can produce:
+
+```text
+grid_lat = 19997
+grid_lon = 73789
+grid_id  = 19997_73789
+```
+
+The same calculation is applied consistently to all GPS records.
+
+---
+
+## Grid Event Aggregation
+
+GPS records are grouped by:
+
+```text
+grid_id
+grid_lat
+grid_lon
+```
+
+The number of GPS events in each grid is calculated as:
+
+```text
+event_count
+```
+
+Example:
+
+| grid_id     | grid_lat | grid_lon | event_count |
+| ----------- | -------: | -------: | ----------: |
+| 19998_73790 |    19998 |    73790 |        1250 |
+| 19997_73790 |    19997 |    73790 |        1135 |
+| 19997_73789 |    19997 |    73789 |         978 |
+
+The actual values are generated from the input dataset.
+
+---
+
+## Hotspot Classification
+
+The grid cells are classified according to their event density using percentile-based thresholds.
+
+### HIGH
+
+Grid event count is at or above the 90th percentile.
+
+### MEDIUM
+
+Grid event count is at or above the 70th percentile but below the 90th percentile.
+
+### LOW
+
+Grid event count is below the 70th percentile.
+
+This approach allows the classification to adapt to the distribution of the dataset.
+
+---
+
+## Hotspot Ranking
+
+Each grid is assigned a rank based on its event count.
+
+The grid with the highest number of events receives:
+
+```text
+hotspot_rank = 1
+```
+
+The grids are sorted in descending order of `event_count`.
+
+---
+
+## Statistics Generated
+
+Day 10 calculates the following statistics:
+
+* Total validated records
+* Usable spatial records
+* Total spatial grids
+* Total grid events
+* Minimum events per grid
+* Maximum events per grid
+* Average events per grid
+* Medium-density threshold
+* High-density threshold
+
+---
+
+## Output Structure
+
+Day 10 generates the following output:
+
+```text
+data/
+└── output/
+    └── day10_hotspots/
+        ├── grid_counts/
+        ├── hotspot_results/
+        └── hotspot_summary/
+```
+
+---
+
+## Output Description
+
+### `grid_counts/`
+
+Contains the number of GPS events in each spatial grid.
+
+Fields:
+
+```text
+grid_id
+grid_lat
+grid_lon
+event_count
+```
+
+---
+
+### `hotspot_results/`
+
+Contains the complete hotspot analysis.
+
+Fields:
+
+```text
+grid_id
+grid_lat
+grid_lon
+event_count
+density_level
+hotspot_rank
+```
+
+---
+
+### `hotspot_summary/`
+
+Contains overall hotspot statistics.
+
+Fields:
+
+```text
+metric
+value
+```
+
+---
+
+## Project File
+
+The Day 10 Python implementation is:
+
+```text
+spatial/jobs/hotspot_analysis.py
+```
+
+---
+
+## How to Run
+
+From the GeoPulse project root directory:
+
+```powershell
+python -m spatial.jobs.hotspot_analysis
+```
+
+---
+
+## Expected Console Output
+
+```text
+======================================================================
+GeoPulse - Day 10: Spatial Hotspot Analysis
+======================================================================
+
+[1] Starting Spark session...
+
+[2] Locating Day 9 validated GPS data...
+
+[3] Loading validated GPS data...
+
+[4] Detecting coordinate columns...
+
+[5] Preparing spatial coordinates...
+
+[6] Removing records with missing coordinates...
+
+[7] Creating spatial grid...
+
+[8] Counting GPS events per grid...
+
+[9] Saving grid counts...
+
+[10] Calculating hotspot statistics...
+
+[11] Calculating density thresholds...
+
+[12] Classifying spatial density...
+
+[13] Ranking hotspot grids...
+
+[14] Saving hotspot results...
+
+[15] Creating hotspot summary...
+
+======================================================================
+HOTSPOT ANALYSIS SUMMARY
+======================================================================
+
+Total validated records : XXXXX
+Usable spatial records  : XXXXX
+Total spatial grids     : XXXXX
+Minimum events/grid     : XX
+Maximum events/grid     : XXXX
+Average events/grid     : XXX
+
+Top hotspot grids:
+
+    1. <grid_id> - XXXX events - HIGH
+    2. <grid_id> - XXXX events - HIGH
+    3. <grid_id> - XXXX events - HIGH
+
+======================================================================
+Day 10 hotspot analysis completed successfully.
+======================================================================
+```
+
+The actual values are generated automatically from the dataset.
+
+---
+
+## Validation Checklist
+
+```text
+[✓] Day 9 validated GPS data loaded
+[✓] Latitude detected
+[✓] Longitude detected
+[✓] Missing coordinates removed
+[✓] Spatial grid generated
+[✓] GPS points assigned to grids
+[✓] Events counted per grid
+[✓] Spatial statistics calculated
+[✓] Density thresholds calculated
+[✓] HIGH/MEDIUM/LOW classification performed
+[✓] Hotspots ranked
+[✓] Grid counts saved
+[✓] Hotspot results saved
+[✓] Hotspot summary saved
+```
+
+---
+
+## Git Commands
+
+Check the changes:
+
+```powershell
+git status
+```
+
+Add Day 10 files:
+
+```powershell
+git add README.md spatial/jobs/hotspot_analysis.py
+```
+
+Commit:
+
+```powershell
+git commit -m "Day 10 spatial hotspot analysis"
+```
+
+Push to the `sakshi` branch:
+
+```powershell
+git push origin sakshi
+```
+
+---
+
+## Day 10 Deliverables
+
+```text
+1. spatial/jobs/hotspot_analysis.py
+2. Grid count results
+3. Hotspot analysis results
+4. Hotspot summary
+5. Updated README.md
+```
+
+---
+
+## Day 10 Completion
+
+Day 10 completes the grid-based spatial hotspot analysis of the validated GPS dataset.
+
+The resulting hotspot information can be used in subsequent days for spatial visualization and advanced spatial analysis.
