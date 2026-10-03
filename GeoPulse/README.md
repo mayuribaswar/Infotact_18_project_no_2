@@ -3021,3 +3021,104 @@ Automated tests were added to verify:
 ### Day 8 Outcome
 
 The hotspot results generated during spatial analysis are now available as both structured data and a visual representation, making high-density spatial areas easier to identify and analyze.
+# GeoPulse - Day 9
+## Spatial Data Quality Validation
+
+### Overview
+
+Day 9 focuses on validating the quality and consistency of the spatial GPS data used in the GeoPulse project.
+
+The objective is to identify invalid coordinates, missing values, incorrect timestamps, and duplicate records before performing further spatial analysis.
+
+---
+
+## Objectives
+
+The main objectives of Day 9 are:
+
+1. Load the GPS mobility dataset.
+2. Inspect the structure and schema of the data.
+3. Validate latitude and longitude values.
+4. Validate timestamp information.
+5. Identify missing values.
+6. Detect duplicate records.
+7. Generate a data-quality summary.
+8. Save the validation results for further analysis.
+
+---
+
+## Technologies Used
+
+- Python 3.12.10
+- Apache Spark
+- PySpark 3.5.6
+- Apache Sedona
+- Pandas
+- Git and GitHub
+
+---
+
+## Project Structure
+
+```text
+GeoPulse/
+│
+├── data/
+│   ├── gps/
+│   ├── polygons/
+│   └── output/
+│       └── day9_validation/
+│
+├── spatial/
+│   ├── jobs/
+│   │   ├── boundary_validation.py
+│   │   ├── movement_analysis.py
+│   │   └── spatial_validation.py
+│   │
+│   └── utils/
+│
+├── tests/
+│
+├── README.md
+└── requirements.txt
+# GeoPulse: Day 10 - End-to-End Pipeline Orchestration & Warehouse Integration
+
+## Overview
+Day 10 finalizes the GeoPulse mobility analytics platform by connecting all previously isolated modules into a single, automated, production-ready execution pipeline (`jobs/pipeline.py`). It orchestrates GPS ingestion, spatial validation, movement calculation, hotspot clustering, and final artifact generation.
+
+---
+
+## Complete Project Structure
+
+```text
+GeoPulse/
+└── spatial/
+    ├── data/
+    │   ├── raw_gps_pings.csv
+    │   ├── store_boundaries.geojson
+    │   └── output/
+    │       ├── movement_metrics.parquet/
+    │       ├── hotspots.parquet/
+    │       └── hotspot_map.html
+    ├── jobs/
+    │   ├── __init__.py
+    │   ├── gps_ingestion.py
+    │   ├── spatial_validation.py
+    │   ├── boundary_validation.py
+    │   ├── movement_analysis.py
+    │   ├── hotspot_analysis.py
+    │   ├── hotspot_visualization.py
+    │   ├── test_sedona.py
+    │   └── pipeline.py
+    ├── schemas/
+    │   └── __init__.py
+    ├── tests/
+    │   ├── __init__.py
+    │   ├── test_boundary_validation.py
+    │   ├── test_hotspot_analysis.py
+    │   ├── test_hotspot_visualization.py
+    │   └── test_movement_analysis.py
+    ├── utils/
+    │   └── __init__.py
+    ├── requirements-spatial.txt
+    └── README.md
