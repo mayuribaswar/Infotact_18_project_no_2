@@ -3487,5 +3487,370 @@ git push origin sakshi
 ## Day 10 Completion
 
 Day 10 completes the grid-based spatial hotspot analysis of the validated GPS dataset.
-
 The resulting hotspot information can be used in subsequent days for spatial visualization and advanced spatial analysis.
+
+# GeoPulse — Day 11
+
+## Hotspot Insight & Risk Classification
+
+### 📌 Overview
+
+Day 11 of the **GeoPulse** project focuses on converting hotspot detection results into meaningful **risk classifications and business insights**.
+
+The system analyzes spatial hotspot scores and activity levels and classifies geographical grids into three categories:
+
+* **HIGH** — Strong hotspot activity
+* **MEDIUM** — Moderate hotspot activity
+* **LOW** — Lower hotspot activity
+
+This step transforms the previous spatial-analysis results into an easier-to-understand risk assessment.
+
+---
+
+## 🎯 Objectives
+
+The main objectives of Day 11 are:
+
+1. Load the hotspot results generated in previous stages.
+2. Calculate statistics for each geographical grid.
+3. Analyze hotspot scores and event activity.
+4. Classify each grid into HIGH, MEDIUM, or LOW risk.
+5. Generate a structured CSV containing the classifications.
+6. Generate a text-based hotspot insight report.
+7. Add automated tests for the risk-classification logic.
+
+---
+
+## 🏗️ Day 11 Architecture
+
+```text
+GPS / Spatial Data
+        │
+        ▼
+Hotspot Detection
+        │
+        ▼
+hotspot_results.csv
+        │
+        ▼
+Grid Statistics
+        │
+        ├── Hotspot Score
+        ├── Event Count
+        └── Unique Users
+        │
+        ▼
+Risk Classification
+        │
+        ├── HIGH
+        ├── MEDIUM
+        └── LOW
+        │
+        ├───────────────┐
+        ▼               ▼
+CSV Output        Insight Report
+```
+
+---
+
+## 📂 Files Added
+
+```text
+GeoPulse/
+│
+├── spatial/
+│   └── jobs/
+│       └── risk_classification.py
+│
+├── tests/
+│   └── test_risk_classification.py
+│
+└── data/
+    └── output/
+        ├── risk_classification.csv
+        └── hotspot_insights.txt
+```
+
+---
+
+## 📥 Input
+
+Day 11 uses the hotspot output generated during the previous spatial-analysis stages.
+
+### Input file
+
+```text
+data/output/hotspot_results.csv
+```
+
+The input contains geographical grid information and hotspot-related metrics.
+
+Depending on the previous processing stage, the file may contain columns such as:
+
+```text
+grid_id
+hotspot_score
+event_count
+user_id
+vehicle_id
+device_id
+```
+
+The Day 11 script automatically looks for commonly used column names.
+
+---
+
+## ⚙️ Risk Classification Logic
+
+Each geographical grid is assigned a risk level according to its hotspot score.
+
+### 🔴 HIGH Risk
+
+```text
+hotspot_score >= 0.70
+```
+
+These grids have strong hotspot activity and should receive priority monitoring.
+
+### 🟠 MEDIUM Risk
+
+```text
+0.40 <= hotspot_score < 0.70
+```
+
+These grids show moderate activity and should be monitored for possible increases.
+
+### 🟢 LOW Risk
+
+```text
+hotspot_score < 0.40
+```
+
+These grids currently show comparatively lower hotspot activity.
+
+---
+
+## 📊 Grid Statistics
+
+For every grid, the system calculates:
+
+### 1. Hotspot Score
+
+Represents the strength or density of hotspot activity.
+
+### 2. Event Count
+
+Represents the amount of detected activity within the grid.
+
+### 3. Unique Users
+
+Represents the number of distinct users, vehicles, or devices associated with the grid when such information is available.
+
+---
+
+## 📤 Output 1 — Risk Classification CSV
+
+The following file is generated:
+
+```text
+data/output/risk_classification.csv
+```
+
+Example:
+
+```csv
+grid_id,hotspot_score,event_count,unique_users,risk_level
+19998_73790,0.91,1250,1250,HIGH
+19997_73790,0.84,1087,1087,HIGH
+19997_73789,0.62,745,745,MEDIUM
+20005_73798,0.48,521,521,MEDIUM
+20000_73793,0.21,189,189,LOW
+```
+
+The actual values depend on the project's input data.
+
+---
+
+## 📤 Output 2 — Hotspot Insights
+
+The following report is generated:
+
+```text
+data/output/hotspot_insights.txt
+```
+
+It contains:
+
+* Total grids analyzed
+* Average hotspot score
+* Number of HIGH-risk grids
+* Number of MEDIUM-risk grids
+* Number of LOW-risk grids
+* Top hotspot grids
+* Event counts
+* User counts
+* Risk interpretation
+
+---
+
+## 🧪 Testing
+
+Day 11 includes automated tests:
+
+```text
+tests/test_risk_classification.py
+```
+
+The tests verify:
+
+* HIGH-risk classification
+* MEDIUM-risk classification
+* LOW-risk classification
+* Boundary values
+* Spark DataFrame processing
+
+---
+
+## ▶️ How to Run
+
+### Step 1 — Open the project
+
+```powershell
+cd "C:\Users\Shree\OneDrive\Desktop\Infotact_18_project_no_2\GeoPulse"
+```
+
+### Step 2 — Run Day 11
+
+```powershell
+python -m spatial.jobs.risk_classification
+```
+
+### Step 3 — Run tests
+
+```powershell
+pytest tests/test_risk_classification.py -v
+```
+
+---
+
+## ✅ Expected Result
+
+After successful execution:
+
+```text
+Day 11 completed successfully!
+```
+
+The following files should be available:
+
+```text
+data/output/risk_classification.csv
+data/output/hotspot_insights.txt
+```
+
+---
+
+## 🔍 Example Risk Distribution
+
+For example, if five grids are analyzed:
+
+```text
+HIGH     : 2 grids
+MEDIUM   : 2 grids
+LOW      : 1 grid
+```
+
+The exact distribution depends on the hotspot data.
+
+---
+
+## 💡 Business Interpretation
+
+The risk classification makes the GeoPulse results easier to understand.
+
+### HIGH Risk
+
+High-risk areas can be prioritized for:
+
+* Traffic monitoring
+* Safety monitoring
+* Resource allocation
+* Further spatial investigation
+* Real-time alerts
+
+### MEDIUM Risk
+
+Medium-risk areas can be monitored for:
+
+* Increasing activity
+* Repeated events
+* Emerging hotspots
+* Changes in spatial patterns
+
+### LOW Risk
+
+Low-risk areas can be treated as comparatively stable areas while continuing normal monitoring.
+
+---
+
+## 🛠️ Technologies Used
+
+* Python 3.12.10
+* Apache Spark
+* PySpark 3.5.6
+* Pandas
+* Pytest
+* CSV
+* Spatial Data Processing
+
+---
+
+## 📈 GeoPulse Pipeline Progress
+
+```text
+Day 1
+Project Setup
+     ↓
+Day 2–6
+Data Processing & Spatial Analysis
+     ↓
+Day 7
+Hotspot Detection
+     ↓
+Day 8
+Visualization
+     ↓
+Day 9
+Spatial Data Quality Validation
+     ↓
+Day 10
+Analysis / Visualization
+     ↓
+Day 11
+Hotspot Insight & Risk Classification
+```
+
+---
+
+## 🎯 Day 11 Deliverables
+
+| Deliverable            | Status |
+| ---------------------- | ------ |
+| Hotspot data loading   | ✅      |
+| Grid statistics        | ✅      |
+| Hotspot score analysis | ✅      |
+| Risk classification    | ✅      |
+| CSV generation         | ✅      |
+| Insight report         | ✅      |
+| Automated tests        | ✅      |
+| Documentation          | ✅      |
+
+---
+
+## 📝 Conclusion
+
+Day 11 extends GeoPulse from spatial hotspot detection to **actionable risk analysis**.
+
+The system now identifies geographical areas with different levels of hotspot activity and produces structured outputs that can be used for further visualization, reporting, monitoring, and decision-making.
+
+**GeoPulse Day 11 — Hotspot Insight & Risk Classification completed.**
