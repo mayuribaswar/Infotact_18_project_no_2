@@ -1,0 +1,52 @@
+@"
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log/
+
+# Logs
+*.log
+
+# Generated files
+output/
+outputs/
+results/
+*.tmp
+*.temp
+
+# Large generated/data files
+*.parquet
+*.pkl
+*.pickle
+*.joblib
+*.zip
+*.tar
+*.gz
+
+# Python/Spark packages
+*.whl
+
+# OS
+.DS_Store
+Thumbs.db
+"@ | Set-Content .gitignore

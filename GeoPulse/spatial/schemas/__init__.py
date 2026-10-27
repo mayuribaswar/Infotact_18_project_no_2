@@ -1,0 +1,1 @@
+# GeoPulse spatial schemas package
